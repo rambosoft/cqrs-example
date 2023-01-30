@@ -1,0 +1,46 @@
+spring:
+  security.user:
+    name: admin
+    password: password
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  flyway:
+    sql-migration-prefix: V
+    repeatable-sql-migration-prefix: R
+    sql-migration-separator: __
+    sql-migration-suffixes: .sql
+    locations: classpath:db/migration
+    schemas: bank
+
+  datasource:
+    format-sql: false
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://127.0.0.1:5432/bank
+    username: user
+    password: root
+  jpa:
+    # The SQL dialect makes Hibernate generate better SQL for the chosen database
+    # properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+    ## This is important
+    # Hibernate ddl auto (create, create-drop, validate, update)
+    properties.hibernate.default_schema: bank
+    hibernate:
+      ddl-auto: update
+      physical-strategy: org.hibernate.cfg.DefaultNamingStrategy
+    generate-ddl: true
+    show-sql: true
+# Axon
+axon:
+  serializer:
+    general: jackson
+  eventhandling:
+    processors:
+      my-processor:
+        mode: pooled
+        thread-count: 16
+        initial-segment-count: 32
+      name:
+        mode: tracking

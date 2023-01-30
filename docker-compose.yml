@@ -1,0 +1,34 @@
+version: '3.9'
+services:
+  bankdb:
+    container_name: bank-postgresdb-container
+    image: postgres:14-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=bank
+    ports:
+      - "5432:5432"
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/datas
+    networks:
+      - bank-network
+  axon-server:
+    # docker run -d --name my-axon-server -p 8024:8024 -p 8124:8124 axoniq/axonserver
+    image: axoniq/axonserver
+    container_name: distributed-example-axon-server
+    healthcheck:
+      test: curl -f http://localhost:8024/actuator/health || exit 1;
+    ports:
+      - 8024:8024
+      - 8124:8124
+
+networks:
+  bank-network:
+volumes:
+  server-data:
+    driver: local
+  db-data:
+    driver: local
+

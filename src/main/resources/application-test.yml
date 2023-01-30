@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:0/dummy_db
+    username: dummy_user
+    password: dummy_pw
+
+  flyway:
+    locations: classpath:db/migration
+    enabled: true
+    url: jdbc:postgresql://localhost:0/dummy_db
+    user: dummy_user
+    password: dummy_pw
