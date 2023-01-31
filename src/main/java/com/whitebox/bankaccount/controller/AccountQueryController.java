@@ -6,11 +6,10 @@ import com.whitebox.bankaccount.service.TransactionQueryService;
 import com.whitebox.bankaccount.entity.BankAccount;
 import com.whitebox.bankaccount.service.AccountQueryService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -38,8 +37,14 @@ public class AccountQueryController {
         return this.accountQueryService.listEventsForAccount(accountId);
     }
 
-    @GetMapping("/{accountId}/transactions")
+    @GetMapping("/{accountId}/transactions/all")
     public CompletableFuture<AccountTransactionsDTO> findAllTransactions(@PathVariable("accountId") String accountId) {
         return this.transactionQueryService.findAll(accountId);
+    }
+
+    @GetMapping("/{accountId}/transactions")
+    public CompletableFuture<AccountTransactionsDTO> findAllTransactionsSince(@PathVariable("accountId") String accountId,
+                                                                         @RequestParam("since") @DateTimeFormat(pattern="yyyy-MM-dd") Date sinceDate) {
+        return this.transactionQueryService.findAllSince(accountId, sinceDate);
     }
 }
